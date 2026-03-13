@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Government Scheme Navigator</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="home-page">
+
+<div class="overlay">
+
+<div class="form-box">
+
+<h2 data-lang="title" style="text-align:center;margin-bottom:20px;">
+Government Scheme Navigator
+</h2>
+
+<p data-lang="subtitle" style="text-align:center;margin-bottom:30px;color:#555;">
+Find the best welfare schemes for you
+</p>
+
+<select onchange="changeLang(this.value)">
+<option value="en">English</option>
+<option value="ta">Tamil</option>
+<option value="hi">Hindi</option>
+</select>
+
+<form action="/find" method="POST">
+
+<div class="grid">
+
+<div>
+
+<label data-lang="age">Age</label>
+<input type="number" name="age" required>
+
+<label data-lang="gender">Gender</label>
+<select name="gender">
+<option value="Male" data-lang="male">Male</option>
+<option value="Female" data-lang="female">Female</option>
+<option value="Other" data-lang="other">Other</option>
+</select>
+
+<label data-lang="category">Category</label>
+<select name="category">
+<option value="Student" data-lang="student">Student</option>
+<option value="Farmer" data-lang="farmer">Farmer</option>
+<option value="Business Owner" data-lang="business">Business Owner</option>
+<option value="Worker" data-lang="worker">Worker</option>
+<option value="Unemployed" data-lang="unemployed">Unemployed</option>
+<option value="Other" data-lang="other">Other</option>
+</select>
+
+<label data-lang="caste">Caste Category</label>
+<select name="caste">
+<option value="General" data-lang="general">General</option>
+<option value="SC" data-lang="sc">SC</option>
+<option value="ST" data-lang="st">ST</option>
+<option value="OBC" data-lang="obc">OBC</option>
+</select>
+
+</div>
+
+<div>
+
+<label data-lang="education">Educational Qualification</label>
+<select name="education">
+<option value="School" data-lang="school">School</option>
+<option value="Higher Secondary" data-lang="hsc">Higher Secondary</option>
+<option value="UG" data-lang="ug">UG</option>
+<option value="PG" data-lang="pg">PG</option>
+<option value="Diploma" data-lang="diploma">Diploma</option>
+<option value="Other" data-lang="other">Other</option>
+</select>
+
+<label data-lang="scheme_type">Scheme Type</label>
+<select name="scheme_type">
+<option value="Central" data-lang="central">Central</option>
+<option value="State" data-lang="state">State</option>
+</select>
+
+<label data-lang="state">State</label>
+<select name="state">
+<option value="Tamil Nadu" data-lang="tn">Tamil Nadu</option>
+<option value="Kerala" data-lang="kerala">Kerala</option>
+<option value="Karnataka" data-lang="karnataka">Karnataka</option>
+<option value="Andhra Pradesh" data-lang="ap">Andhra Pradesh</option>
+<option value="Telangana" data-lang="telangana">Telangana</option>
+<option value="All" data-lang="otherstates">Other States</option>
+</select>
+
+</div>
+
+</div>
+
+<button type="submit" data-lang="find">Find My Scheme</button>
+
+</form>
+
+</div>
+
+</div>
+
+<script>
+
+/* SAME SCRIPT — NO CHANGE */
+
+const translations={
+
+en:{title:"Government Scheme Navigator",subtitle:"Find the best welfare schemes for you",age:"Age",gender:"Gender",category:"Category",caste:"Caste Category",education:"Educational Qualification",scheme_type:"Scheme Type",state:"State",find:"Find My Scheme",male:"Male",female:"Female",student:"Student",farmer:"Farmer",business:"Business Owner",worker:"Worker",unemployed:"Unemployed",general:"General",sc:"SC",st:"ST",obc:"OBC",school:"School",hsc:"Higher Secondary",ug:"UG",pg:"PG",diploma:"Diploma",central:"Central",state:"State",tn:"Tamil Nadu",kerala:"Kerala",karnataka:"Karnataka",ap:"Andhra Pradesh",telangana:"Telangana",otherstates:"Other States"},
+
+ta:{title:"அரசு திட்ட வழிகாட்டி",subtitle:"உங்களுக்கு பொருத்தமான அரசு நலத்திட்டங்களை கண்டறியுங்கள்",age:"வயது",gender:"பாலினம்",category:"வகை",caste:"சாதி",education:"கல்வித் தகுதி",scheme_type:"திட்ட வகை",state:"மாநிலம்",find:"எனக்கு பொருத்தமான திட்டத்தை கண்டுபிடி",male:"ஆண்",female:"பெண்",student:"மாணவர்",farmer:"விவசாயி",business:"வணிகர்",worker:"தொழிலாளர்",unemployed:"வேலை இல்லாதவர்",general:"பொது",sc:"எஸ்.சி",st:"எஸ்.டி",obc:"ஓபிசி",school:"பள்ளி",hsc:"மேல்நிலை",ug:"இளங்கலை",pg:"முதுகலை",diploma:"டிப்ளமோ",central:"மத்திய",state:"மாநில",tn:"தமிழ்நாடு",kerala:"கேரளா",karnataka:"கர்நாடகா",ap:"ஆந்திர பிரதேசம்",telangana:"தெலுங்கானா",otherstates:"மற்ற மாநிலங்கள்"},
+
+hi:{title:"सरकारी योजना नेविगेटर",subtitle:"अपने लिए उपयुक्त सरकारी योजनाएँ खोजें",age:"आयु",gender:"लिंग",category:"श्रेणी",caste:"जाति श्रेणी",education:"शैक्षिक योग्यता",scheme_type:"योजना प्रकार",state:"राज्य",find:"मेरी योजना खोजें",male:"पुरुष",female:"महिला",student:"छात्र",farmer:"किसान",business:"व्यवसायी",worker:"मज़दूर",unemployed:"बेरोज़गार",general:"सामान्य",sc:"SC",st:"ST",obc:"OBC",school:"स्कूल",hsc:"उच्च माध्यमिक",ug:"स्नातक",pg:"स्नातकोत्तर",diploma:"डिप्लोमा",central:"केंद्र",state:"राज्य",tn:"तमिलनाडु",kerala:"केरल",karnataka:"कर्नाटक",ap:"आंध्र प्रदेश",telangana:"तेलंगाना",otherstates:"अन्य राज्य"}}
+
+function changeLang(lang){
+localStorage.setItem("siteLang",lang)
+document.querySelectorAll("[data-lang]").forEach(el=>{
+let key=el.getAttribute("data-lang")
+el.innerText=translations[lang][key]
+})
+}
+
+window.onload=function(){
+let lang=localStorage.getItem("siteLang")||"en"
+changeLang(lang)
+}
+
+</script>
+
+</body>
+</html> 
