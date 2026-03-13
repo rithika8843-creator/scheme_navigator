@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Recommended Government Schemes</title>
+<link rel="stylesheet" href="/static/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+
+/* --- YOUR ORIGINAL STYLES --- */
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+background-image:url("https://image2url.com/r2/default/images/1773338721461-a6e1f626-88ea-4223-9522-93176b53c0f9.png");
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+filter:brightness(1.35);
+}
+
+.result-container{
+width:900px;
+margin:auto;
+padding:40px;
+}
+
+.page-title{
+text-align:center;
+color:white;
+margin-bottom:30px;
+font-size:34px;
+text-shadow:2px 2px 8px rgba(0,0,0,0.7);
+}
+
+.best{
+background:white;
+padding:30px;
+border-radius:12px;
+margin-bottom:35px;
+box-shadow:0 10px 30px rgba(0,0,0,0.35);
+border-left:6px solid #2c5aa0;
+}
+
+.card{
+background:white;
+padding:20px;
+margin:15px 0;
+border-radius:10px;
+box-shadow:0 6px 20px rgba(0,0,0,0.3);
+border-left:5px solid #2c5aa0;
+}
+
+.section-title{
+margin-top:30px;
+color:white;
+font-size:24px;
+text-shadow:2px 2px 6px rgba(0,0,0,0.7);
+}
+
+.apply-btn{
+display:inline-block;
+margin-top:15px;
+background:#2ecc71;
+color:white;
+padding:10px 18px;
+border-radius:6px;
+text-decoration:none;
+font-weight:600;
+}
+
+.apply-btn:hover{
+background:#27ae60;
+}
+
+/* --- ENHANCED VOICE ASSISTANT STYLES --- */
+#chatbot{
+position:fixed;
+bottom:20px;
+right:20px;
+width:320px;
+background:white;
+padding:15px;
+border-radius:12px;
+box-shadow:0 10px 40px rgba(0,0,0,0.3);
+z-index: 1000;
+border: 1px solid #eee;
+}
+
+#chatbox{
+height:220px;
+overflow-y:auto;
+margin-bottom:10px;
+border: 1px solid #eee;
+padding:10px;
+background: #f9f9f9;
+font-size: 13px;
+border-radius: 8px;
+}
+
+.chat-msg {
+margin-bottom:10px;
+padding:8px 12px;
+border-radius:10px;
+line-height: 1.4;
+max-width: 85%;
+}
+
+.user-msg {
+background: #2c5aa0;
+color: white;
+margin-left: auto;
+border-bottom-right-radius: 2px;
+}
+
+.ai-msg {
+background: white;
+color: #333;
+margin-right: auto;
+border-bottom-left-radius: 2px;
+border: 1px solid #ddd;
+}
+
+#chatbot input{
+width: 100%;
+padding:10px;
+margin-bottom:8px;
+box-sizing: border-box;
+border: 1px solid #ddd;
+border-radius: 20px;
+outline: none;
+font-size: 13px;
+}
+
+#chatbot .btn-row {
+display: flex;
+gap: 5px;
+}
+
+#chatbot button{
+flex: 1;
+padding:10px;
+cursor:pointer;
+border-radius: 20px;
+border: none;
+font-weight: 600;
+transition: all 0.2s;
+}
+
+.send-btn { background: #2c5aa0; color: white; }
+.voice-btn { background: #f0f0f0; color: #555; }
+
+.voice-active {
+background: #ff4444 !important;
+color: white !important;
+animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+0% { transform: scale(1); }
+50% { transform: scale(1.05); }
+100% { transform: scale(1); }
+}
+
+</style>
+</head>
+<body>
+<div class="result-container">
+<h1 class="page-title" data-lang="title">Your Eligible Government Schemes</h1>
+
+{% if best %}
+<div class="best">
+<h2 id="best-scheme-name">{{best['scheme_name']}}</h2>
+<p><b data-lang="score">Eligibility Score:</b> {{best['score']}}%</p>
+<h3 data-lang="benefits">Benefits</h3>
+<p class="translatable" data-original="{{best['benefits']}}">{{best['benefits']}}</p>
+<h3 data-lang="documents">Documents Required</h3>
+<p class="translatable" data-original="{{best['documents']}}">{{best['documents']}}</p>
+<h3 data-lang="steps">Steps to Apply</h3>
+<ol>
+<li data-lang="step1">Visit official government portal</li>
+<li data-lang="step2">Create account / Login</li>
+<li data-lang="step3">Fill application form</li>
+<li data-lang="step4">Upload required documents</li>
+<li data-lang="step5">Submit application</li>
+</ol>
+<a class="apply-btn" data-lang="apply" href="{{best['apply_link']}}" target="_blank">Apply Now</a>
+</div>
+{% endif %}
+
+<h2 class="section-title" data-lang="other">Other Available Schemes</h2>
+{% for s in schemes %}
+<div class="card other-scheme">
+<h3 class="scheme-name">{{s['scheme_name']}}</h3>
+<p><b data-lang="benefits">Benefits:</b> <span class="translatable" data-original="{{s['benefits']}}">{{s['benefits']}}</span></p>
+<p><b data-lang="score">Eligibility Score:</b> {{s['score']}}%</p>
+<a class="apply-btn" data-lang="apply" href="{{s['apply_link']}}" target="_blank">Apply</a>
+</div>
+{% endfor %}
+</div>
+
+<!-- CHATBOT UI -->
+<div id="chatbot">
+<h3 data-lang="assistant" style="margin-top:0; color:#2c5aa0; font-size: 16px;">Scheme Assistant</h3>
+<div id="chatbox"></div>
+<input id="userInput" data-lang-placeholder="ask" placeholder="Ask about schemes..." onkeypress="if(event.key==='Enter') sendMessage()">
+<div class="btn-row">
+    <button onclick="sendMessage()" class="send-btn" data-lang="send">Send</button>
+    <button id="voiceBtn" onclick="startVoice()" class="voice-btn">🎤 Voice</button>
+</div>
+</div>
+
+<!-- SMART AI ASSISTANT LOGIC -->
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.run/@google/genai"
+  }
+}
+</script>
+
+<script type="module">
+import { GoogleGenAI } from "@google/genai";
+
+// Initialize Gemini - FIXED: Removed quotes around process.env
+const apiKey = typeof process !== 'undefined' ? process.env.GEMINI_API_KEY : '';
+const genAI = new GoogleGenAI({ apiKey: apiKey });
+
+let isRecording = false;
+let mediaRecorder = null;
+let audioChunks = [];
+let useAIVoiceOnly = false;
+
+// Context gathering: This reads the schemes listed on your page
+const getContext = () => {
+    const best = document.getElementById("best-scheme-name")?.innerText || "None";
+    const others = Array.from(document.querySelectorAll(".other-scheme .scheme-name")).map(el => el.innerText).join(", ");
+    return `The user is currently eligible for: ${best} (Top recommendation) and ${others}.`;
+};
+
+window.sendMessage = async function() {
+    const input = document.getElementById("userInput");
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    if (!apiKey) {
+        appendMessage("System", "Error: Gemini API Key is missing. Please set GEMINI_API_KEY in settings.", "ai-msg");
+        return;
+    }
+
+    appendMessage("You", msg, "user-msg");
+    input.value = "";
+
+    // Show thinking indicator
+    const thinkingId = appendMessage("Assistant", "Thinking...", "ai-msg");
+
+    try {
+        const model = genAI.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: [{
+                role: "user",
+                parts: [{ text: `
+                    You are an expert Government Scheme Assistant. 
+                    Context: ${getContext()}
+                    User Language Preference: ${localStorage.getItem("siteLang") || 'en'}
+                    
+                    Instructions:
+                    1. If the user asks about the schemes on the page, provide details.
+                    2. If they ask about other schemes, use your internal knowledge.
+                    3. ALWAYS reply in the SAME language the user used (Tamil, Hindi, or English).
+                    4. Be helpful, professional, and concise.
+                    
+                    User Message: ${msg}
+                ` }]
+            }]
+        });
+
+        const response = await model;
+        const reply = response.text;
+        
+        // Update thinking message with actual reply
+        document.getElementById(thinkingId).innerHTML = `<b>Assistant:</b> ${reply}`;
+        speak(reply);
+    } catch (err) {
+        console.error("Gemini Error:", err);
+        document.getElementById(thinkingId).innerText = "Assistant: Sorry, I encountered an error. Please check your connection or API key.";
+    }
+};
+
+window.startVoice = async function() {
+    const voiceBtn = document.getElementById("voiceBtn");
+    
+    if (isRecording) {
+        stopAIRecording();
+        return;
+    }
+
+    if (useAIVoiceOnly) {
+        startAIRecording();
+        return;
+    }
+
+    const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+    if (SpeechRecognition) {
+        try {
+            await navigator.mediaDevices.getUserMedia({ audio: true });
+            const recognition = new SpeechRecognition();
+            const lang = localStorage.getItem("siteLang") || "en";
+            recognition.lang = lang === 'ta' ? 'ta-IN' : lang === 'hi' ? 'hi-IN' : 'en-IN';
+            
+            recognition.onstart = () => voiceBtn.classList.add("voice-active");
+            recognition.onend = () => voiceBtn.classList.remove("voice-active");
+            
+            recognition.onerror = (e) => {
+                if (e.error === 'service-not-allowed') {
+                    useAIVoiceOnly = true;
+                    appendMessage("System", "*(Switching to AI Voice mode...)*", "ai-msg");
+                    startAIRecording();
+                }
+            };
+
+            recognition.onresult = (e) => {
+                const text = e.results[0][0].transcript;
+                document.getElementById("userInput").value = text;
+                sendMessage();
+            };
+
+            recognition.start();
+        } catch (err) {
+            alert("Microphone access denied.");
+        }
+    } else {
+        startAIRecording();
+    }
+};
+
+async function startAIRecording() {
+    const voiceBtn = document.getElementById("voiceBtn");
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+        mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = () => {
+                const base64 = reader.result.split(',')[1];
+                sendAudioToAI(base64);
+            };
+            stream.getTracks().forEach(t => t.stop());
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        voiceBtn.classList.add("voice-active");
+        setTimeout(() => stopAIRecording(), 6000); // Record for 6s
+    } catch (err) {
+        alert("Microphone access denied.");
+    }
+}
+
+function stopAIRecording() {
+    if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false;
+        document.getElementById("voiceBtn").classList.remove("voice-active");
+    }
+}
+
+async function sendAudioToAI(base64) {
+    const thinkingId = appendMessage("You", "🎤 (Voice Message processing...)", "user-msg");
+    try {
+        const model = genAI.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: [{
+                role: "user",
+                parts: [
+                    { inlineData: { mimeType: "audio/webm", data: base64 } },
+                    { text: `Understand this audio. Context: ${getContext()}. Reply in the same language detected in the audio (Tamil, Hindi, or English).` }
+                ]
+            }]
+        });
+        const response = await model;
+        const reply = response.text;
+        appendMessage("Assistant", reply, "ai-msg");
+        speak(reply);
+    } catch (err) {
+        appendMessage("Assistant", "Could not process audio.", "ai-msg");
+    }
+}
+
+function appendMessage(sender, text, className) {
+    const chatbox = document.getElementById("chatbox");
+    const id = "msg-" + Date.now();
+    const div = document.createElement("div");
+    div.id = id;
+    div.className = `chat-msg ${className}`;
+    div.innerHTML = `<b>${sender}:</b> ${text}`;
+    chatbox.appendChild(div);
+    chatbox.scrollTop = chatbox.scrollHeight;
+    return id;
+}
+
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    const lang = localStorage.getItem("siteLang") || "en";
+    utterance.lang = lang === 'ta' ? 'ta-IN' : lang === 'hi' ? 'hi-IN' : 'en-IN';
+    window.speechSynthesis.speak(utterance);
+}
+</script>
+
+<!-- FULL PAGE TRANSLATION -->
+<script>
+const translations={
+en:{ title:"Your Eligible Government Schemes", other:"Other Available Schemes", score:"Eligibility Score:", benefits:"Benefits", documents:"Documents Required", steps:"Steps to Apply", step1:"Visit official government portal", step2:"Create account / Login", step3:"Fill application form", step4:"Upload required documents", step5:"Submit application", apply:"Apply Now", assistant:"Scheme Assistant", send:"Send", ask:"Ask about schemes..." },
+ta:{ title:"உங்களுக்கு தகுதியான அரசு திட்டங்கள்", other:"மற்ற கிடைக்கும் திட்டங்கள்", score:"தகுதி மதிப்பெண்:", benefits:"நன்மைகள்", documents:"தேவையான ஆவணங்கள்", steps:"விண்ணப்பிக்கும் படிகள்", step1:"அதிகாரப்பூர்வ அரசு இணையதளத்தை பார்வையிடவும்", step2:"கணக்கு உருவாக்கவும் / உள்நுழையவும்", step3:"விண்ணப்ப படிவத்தை நிரப்பவும்", step4:"தேவையான ஆவணங்களை பதிவேற்றவும்", step5:"விண்ணப்பத்தை சமர்ப்பிக்கவும்", apply:"விண்ணப்பிக்க", assistant:"திட்ட உதவியாளர்", send:"அனுப்பு", ask:"திட்டங்களை பற்றி கேளுங்கள்..." },
+hi:{ title:"आपके लिए उपयुक्त सरकारी योजनाएँ", other:"अन्य उपलब्ध योजनाएँ", score:"पात्रता स्कोर:", benefits:"लाभ", documents:"आवश्यक दस्तावेज़", steps:"आवेदन करने के चरण", step1:"आधिकारिक सरकारी पोर्टल पर जाएं", step2:"खाता बनाएं / लॉगिन करें", step3:"आवेदन फ़ॉर्म भरें", step4:"आवश्यक दस्तावेज़ अपलोड करें", step5:"आवेदन जमा करें", apply:"अभी आवेदन करें", assistant:"योजना सहायक", send:"भेजें", ask:"योजनाओं के बारे में पूछें..." }
+}
+
+function changeLang(lang){
+localStorage.setItem("siteLang",lang)
+document.querySelectorAll("[data-lang]").forEach(el=>{
+let key=el.getAttribute("data-lang")
+if(translations[lang][key]){ el.innerText=translations[lang][key] }
+})
+document.querySelectorAll("[data-lang-placeholder]").forEach(el=>{
+let key=el.getAttribute("data-lang-placeholder")
+if(translations[lang][key]){ el.placeholder=translations[lang][key] }
+})
+}
+
+window.onload=function(){
+let lang=localStorage.getItem("siteLang")||"en"
+changeLang(lang)
+}
+</script>
+</body>
+</html>
