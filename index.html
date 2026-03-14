@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="/static/style.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
 </head>
 
 <body class="home-page">
@@ -53,7 +52,7 @@ Find the best welfare schemes for you
 <option value="Business Owner" data-lang="business">Business Owner</option>
 <option value="Worker" data-lang="worker">Worker</option>
 <option value="Unemployed" data-lang="unemployed">Unemployed</option>
-<option value="Other" data-lang="other">Other</option>
+<option value="Other" data-lang="other">Others</option>
 </select>
 
 <label data-lang="caste">Caste Category</label>
@@ -75,7 +74,7 @@ Find the best welfare schemes for you
 <option value="UG" data-lang="ug">UG</option>
 <option value="PG" data-lang="pg">PG</option>
 <option value="Diploma" data-lang="diploma">Diploma</option>
-<option value="Other" data-lang="other">Other</option>
+<option value="Other" data-lang="other">Others</option>
 </select>
 
 <label data-lang="scheme_type">Scheme Type</label>
@@ -106,24 +105,202 @@ Find the best welfare schemes for you
 
 </div>
 
+
+<!-- AI ASSISTANT -->
+
+<div id="assistant-box">
+
+<h3 data-lang="assistant">🤖 Scheme AI Assistant</h3>
+
+<div id="chatbox"></div>
+
+<label data-lang="entertext">Enter a Text</label>
+
+<input id="userInput" placeholder="Ask about schemes...">
+
+<div class="assistant-buttons">
+<button onclick="sendMessage()">Send</button>
+<button onclick="startVoice()">🎤 Voice</button>
+</div>
+
+</div>
+
+
 <script>
 
-/* SAME SCRIPT — NO CHANGE */
+function sendMessage(){
+
+let msg=document.getElementById("userInput").value;
+let lang=localStorage.getItem("siteLang")||"en";
+
+fetch("/chat",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({message:msg,lang:lang})
+})
+
+.then(res=>res.json())
+.then(data=>{
+
+let chat=document.getElementById("chatbox");
+
+chat.innerHTML+=`<div><b>You:</b> ${msg}</div>`;
+chat.innerHTML+=`<div><b>Assistant:</b> ${data.reply}</div>`;
+
+chat.scrollTop=chat.scrollHeight;
+
+document.getElementById("userInput").value="";
+})
+}
+
+function startVoice(){
+
+let recognition=new webkitSpeechRecognition();
+recognition.lang="en-IN";
+
+recognition.onresult=function(event){
+let text=event.results[0][0].transcript;
+document.getElementById("userInput").value=text;
+}
+
+recognition.start()
+}
+
+
+/* TRANSLATION */
 
 const translations={
 
-en:{title:"Government Scheme Navigator",subtitle:"Find the best welfare schemes for you",age:"Age",gender:"Gender",category:"Category",caste:"Caste Category",education:"Educational Qualification",scheme_type:"Scheme Type",state:"State",find:"Find My Scheme",male:"Male",female:"Female",student:"Student",farmer:"Farmer",business:"Business Owner",worker:"Worker",unemployed:"Unemployed",general:"General",sc:"SC",st:"ST",obc:"OBC",school:"School",hsc:"Higher Secondary",ug:"UG",pg:"PG",diploma:"Diploma",central:"Central",state:"State",tn:"Tamil Nadu",kerala:"Kerala",karnataka:"Karnataka",ap:"Andhra Pradesh",telangana:"Telangana",otherstates:"Other States"},
+en:{
+title:"Government Scheme Navigator",
+subtitle:"Find the best welfare schemes for you",
+age:"Age",
+gender:"Gender",
+category:"Category",
+caste:"Caste Category",
+education:"Educational Qualification",
+scheme_type:"Scheme Type",
+state:"State",
+find:"Find My Scheme",
+assistant:"Scheme AI Assistant",
+entertext:"Enter a Text",
+male:"Male",
+female:"Female",
+other:"Others",
+student:"Student",
+farmer:"Farmer",
+business:"Business Owner",
+worker:"Worker",
+unemployed:"Unemployed",
+general:"General",
+sc:"SC",
+st:"ST",
+obc:"OBC",
+school:"School",
+hsc:"Higher Secondary",
+ug:"UG",
+pg:"PG",
+diploma:"Diploma",
+central:"Central",
+tn:"Tamil Nadu",
+kerala:"Kerala",
+karnataka:"Karnataka",
+ap:"Andhra Pradesh",
+telangana:"Telangana",
+otherstates:"Other States"
+},
 
-ta:{title:"அரசு திட்ட வழிகாட்டி",subtitle:"உங்களுக்கு பொருத்தமான அரசு நலத்திட்டங்களை கண்டறியுங்கள்",age:"வயது",gender:"பாலினம்",category:"வகை",caste:"சாதி",education:"கல்வித் தகுதி",scheme_type:"திட்ட வகை",state:"மாநிலம்",find:"எனக்கு பொருத்தமான திட்டத்தை கண்டுபிடி",male:"ஆண்",female:"பெண்",student:"மாணவர்",farmer:"விவசாயி",business:"வணிகர்",worker:"தொழிலாளர்",unemployed:"வேலை இல்லாதவர்",general:"பொது",sc:"எஸ்.சி",st:"எஸ்.டி",obc:"ஓபிசி",school:"பள்ளி",hsc:"மேல்நிலை",ug:"இளங்கலை",pg:"முதுகலை",diploma:"டிப்ளமோ",central:"மத்திய",state:"மாநில",tn:"தமிழ்நாடு",kerala:"கேரளா",karnataka:"கர்நாடகா",ap:"ஆந்திர பிரதேசம்",telangana:"தெலுங்கானா",otherstates:"மற்ற மாநிலங்கள்"},
+ta:{
+title:"அரசு திட்ட வழிகாட்டி",
+subtitle:"உங்களுக்கு பொருத்தமான அரசு நலத்திட்டங்களை கண்டறியுங்கள்",
+age:"வயது",
+gender:"பாலினம்",
+category:"வகை",
+caste:"சாதி",
+education:"கல்வித் தகுதி",
+scheme_type:"திட்ட வகை",
+state:"மாநிலம்",
+find:"எனக்கு பொருத்தமான திட்டத்தை கண்டுபிடி",
+assistant:"திட்ட AI உதவியாளர்",
+entertext:"உங்கள் கேள்வியை உள்ளிடுங்கள்",
+male:"ஆண்",
+female:"பெண்",
+other:"மற்றவை",
+student:"மாணவர்",
+farmer:"விவசாயி",
+business:"வணிகர்",
+worker:"தொழிலாளர்",
+unemployed:"வேலை இல்லாதவர்",
+general:"பொது",
+sc:"எஸ்.சி",
+st:"எஸ்.டி",
+obc:"ஓபிசி",
+school:"பள்ளி",
+hsc:"மேல்நிலை",
+ug:"இளங்கலை",
+pg:"முதுகலை",
+diploma:"டிப்ளமோ",
+central:"மத்திய",
+tn:"தமிழ்நாடு",
+kerala:"கேரளா",
+karnataka:"கர்நாடகா",
+ap:"ஆந்திர பிரதேசம்",
+telangana:"தெலுங்கானா",
+otherstates:"மற்ற மாநிலங்கள்"
+},
 
-hi:{title:"सरकारी योजना नेविगेटर",subtitle:"अपने लिए उपयुक्त सरकारी योजनाएँ खोजें",age:"आयु",gender:"लिंग",category:"श्रेणी",caste:"जाति श्रेणी",education:"शैक्षिक योग्यता",scheme_type:"योजना प्रकार",state:"राज्य",find:"मेरी योजना खोजें",male:"पुरुष",female:"महिला",student:"छात्र",farmer:"किसान",business:"व्यवसायी",worker:"मज़दूर",unemployed:"बेरोज़गार",general:"सामान्य",sc:"SC",st:"ST",obc:"OBC",school:"स्कूल",hsc:"उच्च माध्यमिक",ug:"स्नातक",pg:"स्नातकोत्तर",diploma:"डिप्लोमा",central:"केंद्र",state:"राज्य",tn:"तमिलनाडु",kerala:"केरल",karnataka:"कर्नाटक",ap:"आंध्र प्रदेश",telangana:"तेलंगाना",otherstates:"अन्य राज्य"}}
+hi:{
+title:"सरकारी योजना नेविगेटर",
+subtitle:"अपने लिए उपयुक्त सरकारी योजनाएँ खोजें",
+age:"आयु",
+gender:"लिंग",
+category:"श्रेणी",
+caste:"जाति",
+education:"शैक्षिक योग्यता",
+scheme_type:"योजना प्रकार",
+state:"राज्य",
+find:"मेरी योजना खोजें",
+assistant:"योजना AI सहायक",
+entertext:"अपना प्रश्न लिखें",
+male:"पुरुष",
+female:"महिला",
+other:"अन्य",
+student:"छात्र",
+farmer:"किसान",
+business:"व्यवसायी",
+worker:"मज़दूर",
+unemployed:"बेरोज़गार",
+general:"सामान्य",
+sc:"SC",
+st:"ST",
+obc:"OBC",
+school:"स्कूल",
+hsc:"उच्च माध्यमिक",
+ug:"स्नातक",
+pg:"स्नातकोत्तर",
+diploma:"डिप्लोमा",
+central:"केंद्र",
+tn:"तमिलनाडु",
+kerala:"केरल",
+karnataka:"कर्नाटक",
+ap:"आंध्र प्रदेश",
+telangana:"तेलंगाना",
+otherstates:"अन्य राज्य"
+}
+
+}
 
 function changeLang(lang){
+
 localStorage.setItem("siteLang",lang)
+
 document.querySelectorAll("[data-lang]").forEach(el=>{
 let key=el.getAttribute("data-lang")
+if(translations[lang][key]){
 el.innerText=translations[lang][key]
+}
 })
+
 }
 
 window.onload=function(){
@@ -134,4 +311,4 @@ changeLang(lang)
 </script>
 
 </body>
-</html> 
+</html>

@@ -2,28 +2,24 @@ from flask import Flask, render_template, request, send_file, jsonify
 import sqlite3
 import random
 from fpdf import FPDF
-from googletrans import Translator   # NEW
+from googletrans import Translator
 
 app = Flask(__name__)
 
-# Translator initialization
 translator = Translator()
 
 
-# Database connection
 def get_db():
     conn = sqlite3.connect("database.db")
     conn.row_factory = sqlite3.Row
     return conn
 
 
-# Home page
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-# Find schemes
 @app.route("/find", methods=["POST"])
 def find():
 
@@ -57,6 +53,7 @@ def find():
     conn.close()
 
     schemes = []
+
     for r in rows:
         s = dict(r)
         s["score"] = random.randint(70,95)
@@ -78,7 +75,6 @@ def find():
     )
 
 
-# PDF download
 @app.route("/download")
 def download():
 
@@ -102,28 +98,44 @@ def download():
     return send_file(file,as_attachment=True)
 
 
-# Simple chatbot
+# SMART MULTI LANGUAGE CHATBOT
 @app.route("/chat",methods=["POST"])
 def chat():
 
-    user_msg=request.json.get("message","").lower()
+    data=request.get_json()
 
-    if "farmer" in user_msg:
-        reply="You may be eligible for PM Kisan Scheme."
+    user_msg=data.get("message","").lower()
+    lang=data.get("lang","en")
 
-    elif "student" in user_msg:
-        reply="You may check First Graduate Scholarship."
+    reply_en="Please ask about government schemes."
+
+    if "scholarship" in user_msg or "student" in user_msg:
+        reply_en="Students can apply for National Scholarship Portal, INSPIRE Scholarship and AICTE scholarships."
+
+    elif "farmer" in user_msg or "kisan" in user_msg:
+        reply_en="Farmers can benefit from PM Kisan Samman Nidhi, PM Fasal Bima Yojana and Kisan Credit Card."
+
+    elif "loan" in user_msg or "business" in user_msg:
+        reply_en="Business owners can apply for Mudra Loan, Startup India scheme or MSME loan schemes."
+
+    elif "job" in user_msg or "worker" in user_msg:
+        reply_en="Workers can register in eShram portal or apply for MGNREGA employment scheme."
 
     elif "documents" in user_msg:
-        reply="Usually Aadhaar, income certificate and community certificate are required."
+        reply_en="Most schemes require Aadhaar card, income certificate, caste certificate and bank account."
 
-    else:
-        reply="Please fill the form to find suitable government schemes."
+    elif "health" in user_msg:
+        reply_en="You can apply for Ayushman Bharat health insurance scheme."
 
-    return {"reply":reply}
+    try:
+        if lang!="en":
+            translated=translator.translate(reply_en,dest=lang).text
+        else:
+            translated=reply_en
+    except:
+        translated=reply_en
 
-
-# NEW TRANSLATION API
+    return jsonify({"reply":translated})
 @app.route("/translate", methods=["POST"])
 def translate():
 
